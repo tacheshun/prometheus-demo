@@ -1,5 +1,5 @@
 # We use Helm to deploy Prometheus and Grafana in our local k8s cluster
-# Also we deploy our go example app
+# We also deploy the Go example app
 install:
 	@helm install --name prometheus --set-file extraScrapeConfigs=prometheus/extraScrapeConfigs.yaml stable/prometheus
 	@helm install --name grafana stable/grafana
