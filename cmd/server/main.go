@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"github.com/prometheus/client_golang/prometheus/push"
 	"log"
 	"math/rand"
 	"net/http"
@@ -29,16 +30,33 @@ var (
 	d = promauto.NewCounterVec(prometheus.CounterOpts{
 		Name: "skeleton_app_sample_devices",
 		Help: "Sample counter opts devices for skeleton"}, []string{"device"})
+
+	e = promauto.NewCounter(prometheus.CounterOpts{
+		Name: "skeleton_app_push_metric",
+		Help: "Sample metric for Pushgateway",
+	})
 )
 
 func main() {
+
+	rand.Seed(time.Now().UnixNano())
+
 	go func() {
 		for {
 			rand.Seed(time.Now().UnixNano())
 			h.Observe(float64(rand.Intn(100-0+1) + 0))
 			d.With(prometheus.Labels{"device": "/dev/sda"}).Inc()
 			c.Inc()
-			fmt.Print(".")
+			time.Sleep(1 * time.Second)
+		}
+	}()
+
+	go func() {
+		for {
+			// Example of push metric
+			_ = push.New("http://pushgateway:9091", "skeleton_job").Collector(e).Add()
+			e.Inc()
+			fmt.Print("_")
 			time.Sleep(1 * time.Second)
 		}
 	}()
