@@ -6,8 +6,7 @@ This is a demo made to show sample prometheus metrics in a standard GO app.
 - prometheus sample metrics (skeleton_app_sample_metric, skeleton_app_sample_histogram, skeleton_app_sample_devices)
 - cortex integration for long term data storage
 - Grafana dashboards
-- Infrastructure metrics using node exporters for components that cannot have a `/metrics` http endpoint. Example Docker, PostgreSQL servers, MySQL servers, etc.
-- (todo)alerting for error rates greater than 50%
+- alerting for error rates greater than 50%
 - (todo)kubernetes integration
 
 ## Run
