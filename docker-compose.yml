@@ -44,43 +44,12 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=foobar
       - GF_USERS_ALLOW_SIGN_UP=false
 
-  pushgateway:
-    image: prom/pushgateway
+  alertmanager:
+    image: prom/alertmanager
     ports:
-      - "9091:9091"
-    depends_on:
-      - prometheus
-
-
-  mysql:
-    image: mysql:5.7
-    restart: always
-    environment:
-      MYSQL_DATABASE: 'db'
-      MYSQL_USER: 'user'
-      MYSQL_PASSWORD: 'password'
-      MYSQL_ROOT_PASSWORD: 'password'
-    ports:
-      - '3306:3306'
+      - 9093:9093
     volumes:
-      - './var/mysql:/var/lib/mysql'
-      - './ops/database:/docker-entrypoint-initdb.d'
-      - './var/log/mysql:/var/log/mysql'
-
-  mysqld_exporter:
-    image: prom/mysqld-exporter
-    user: root
-    ports:
-      - '9104:9104'
-    links:
-      - mysql
-    environment:
-      - "DATA_SOURCE_NAME=root:password@(mysql:3306)/db"
-      - "collect.info_schema.tablestats=true"
-      - "collect.info_schema.userstats=true"
-      - "collect.info_schema.query_response_time=true"
-      - "collect.auto_increment.columns=true"
-      - "collect.perf_schema.tableiowaits=true"
-      - "collect.perf_schema.tablelocks=true"
-    depends_on:
-      - mysql
+      - "./etc/prometheus/alertmanager/:/etc/alertmanager/"
+    command:
+      - '--config.file=/etc/alertmanager/config.yml'
+      - '--storage.path=/alertmanager'
