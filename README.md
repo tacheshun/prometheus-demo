@@ -16,4 +16,4 @@ This is a demo made to show sample prometheus metrics in a standard GO app.
 ## Test
 - generate some trafic into the sample app: `docker run prometheus-demo_app`
 - check metrics at : `http://localhost:9090/graph` selecting the `skeleton_app_` prefixed metrics from the dropdown and click on Execute
-- grafana dashboards are here: `http://localhost:3000` -> for now, use admin/admin for username/password
+- grafana dashboards are here: `http://localhost:3000` -> for now, use admin/foobar for username/password
